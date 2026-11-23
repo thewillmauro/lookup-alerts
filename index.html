@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>lookup-alerts demo</title>
+<style>
+  :root{--bg:#06100b;--panel:#0b1a12;--line:#1d4a31;--fg:#c8f5d8;--dim:#6fa785;--accent:#39ff88;color-scheme:dark}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;
+    padding:32px max(16px,env(safe-area-inset-right)) 32px max(16px,env(safe-area-inset-left))}
+  main{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+  h1{font-size:22px;margin:0;color:var(--accent)}
+  p{margin:0;color:var(--dim)}
+  form{display:flex;gap:8px;flex-wrap:wrap}
+  input{flex:1 1 220px;min-width:0;font:inherit;color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:10px 12px;min-height:44px}
+  button{font:inherit;color:var(--bg);background:var(--accent);border:0;border-radius:4px;padding:0 16px;min-height:44px;cursor:pointer}
+  pre{margin:0;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:12px;white-space:pre-wrap;overflow-wrap:anywhere;min-height:6em}
+  :focus-visible{outline:2px solid #e8ff7a;outline-offset:2px}
+</style>
+</head>
+<body>
+<main>
+  <h1>$ whois &lt;your-company&gt;</h1>
+  <p>Type a company website. Known companies open a case file; every lookup sends an alert to the site owner's Discord or Slack. Try <b>acme.io</b>.</p>
+  <form id="f" autocomplete="off">
+    <label for="q" hidden>Company website</label>
+    <input id="q" name="q" placeholder="yourcompany.com" inputmode="url" spellcheck="false" required>
+    <button type="submit">Look up</button>
+  </form>
+  <pre id="out" aria-live="polite">waiting for input...</pre>
+</main>
+<script type="module">
+  import { sendLookup } from "./client/lookup-client.js";
+  // Your case files. The key is the domain a visitor types.
+  const CASE_FILES = {
+    "acme.io": "Acme: 8 target accounts, how I'd score them, and a sample first email.",
+  };
+  const clean = (s) => s.trim().toLowerCase().replace(/^[a-z]+:\/\//, "").split(/[/?#]/)[0].replace(/^www\./, "");
+  document.getElementById("f").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const d = clean(document.getElementById("q").value);
+    const hit = CASE_FILES[d];
+    document.getElementById("out").textContent = hit
+      ? `resolving ${d} ...\nmatch found.\n${hit}`
+      : `resolving ${d} ...\nno case file for ${d} yet. The owner has been notified.`;
+    sendLookup(d, !!hit);
+  });
+</script>
+</body>
+</html>

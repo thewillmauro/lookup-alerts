@@ -1,0 +1,11 @@
+{
+  "name": "lookup-alerts",
+  "version": "1.0.0",
+  "description": "Get a Discord or Slack alert when a company looks itself up on your site. Zero dependencies, private by design.",
+  "type": "module",
+  "license": "MIT",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "test": "node --test"
+  }
+}
