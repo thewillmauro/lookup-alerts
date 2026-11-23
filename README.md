@@ -1,5 +1,15 @@
 # lookup-alerts
 
+```
+( ( • ) )
+    |
+.---+---.     ping: a company just looked itself up.
+| ^   ^ |     pong: you know about it in seconds.
+|  \_/  |
+'-------'
+ \|   |/
+```
+
 Get a Discord or Slack alert the moment a company looks itself up on your site.
 
 I built this for my own portfolio, [thewillmauro.com](https://thewillmauro.com). Visitors type their company's website into a terminal, and if I've built a project for that company, it opens. Either way I get a message like this:
